@@ -11,12 +11,10 @@ emotion_dict = ["Angry","Disgust","Fear","Happy","Neutral","Sad","Surprise"]
 
 classifier =load_model("vgg_model.h5")
 classifier2 =load_model("custom_model.h5")
-classifier3 =load_model("tf_VGG16_model.h5")
 
 # load weights into new model
 classifier.load_weights("vgg_model.h5")
 classifier2.load_weights("custom_model.h5")
-classifier3.load_weights("tf_VGG16_model.h5")
 
 #load face
 try:
@@ -76,35 +74,6 @@ class VideoTransformer_2(VideoTransformerBase):#CONV MODEL
 
         return img
 
-
-class VideoTransformer_3(VideoTransformerBase):#VGG 16 Model 
-    def transform(self, frame):
-        img = frame.to_ndarray(format="bgr24")
-
-        #image gray
-        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        faces = face_cascade.detectMultiScale(
-            image=img_gray, scaleFactor=1.3, minNeighbors=5)
-        for (x, y, w, h) in faces:
-            cv2.rectangle(img=img, pt1=(x, y), pt2=(
-                x + w, y + h), color=(255, 0, 0), thickness=2)
-            roi_gray = img_gray[y:y + h, x:x + w]
-            roi_gray = cv2.resize(roi_gray, (48, 48), interpolation=cv2.INTER_AREA)
-            if np.sum([roi_gray]) != 0:
-                roi = roi_gray.astype('float') / 255.0
-                roi = img_to_array(roi)
-                roi = np.expand_dims(roi, axis=0)
-                prediction = classifier3.predict(roi)[0]
-                maxindex = int(np.argmax(prediction))
-                finalout = emotion_dict[maxindex]
-                output = 'VGG16: ' + str(finalout)
-            label_position = (x, y)
-            cv2.putText(img, output, label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
-
-        return img
-
-
-
 def main():
     # Face Analysis Application #
     st.title("Real-Time Face Emotion Detection")
@@ -120,7 +89,7 @@ def main():
 
         st.markdown(html_temp_home1, unsafe_allow_html=True)
 
-        model_select =  st.selectbox("Select Model",["None","VGG", "CONV", "VGG16"])
+        model_select =  st.selectbox("Select Model",["None","VGG", "CONV"])
   
         if model_select == "VGG":    
             st.subheader("VGG Live Feed")
@@ -148,19 +117,6 @@ def main():
             st.write("F1 Score: 64.3 %") 
             st.write("Balanced Accuracy: 61.2 %")
 
-        if model_select== "VGG16":
-            st.subheader("VGG16 Live Feed")
-            st.write("1. Hit Start and enable camera permission.")
-            st.write("2. Hit Stop to end demo")
-            st.write("3. Try Different Models only after stopping present demo.")
-            webrtc_streamer(key="example", video_transformer_factory=VideoTransformer_3)
-
-            st.subheader("Model Information")
-            st.write("Recall: 55.3 % ")
-            st.write("Precision: 55.7 %")
-            st.write("F1 Score: 54.3 % ")
-            st.write("Balanced Accuracy: 52.5 %")
-        
         elif model_select == "None":
             st.info("What's cooking, good looking? Go ahead and pick a model!  ")
             st.caption("Thanks for Visiting!")
@@ -174,7 +130,7 @@ def main():
                                     <div style="background-color:tomato;padding:10px">
                                     <h4 style="color:white;text-align:center;">This application provides three models to perform 
                                     realtime face emotion recognition.</div>
-                                    <div>They are: Custom VGG Blocks, Custom Conv Layers and VGG16 with ImageNet weights.
+                                    <div>They are: Custom VGG Blocks and Custom Conv Layers.
                                     Face Emotion Recognition 2013 was used to train these models </div>
                                     <br></br>
                                     <br></br>"""
