@@ -9,11 +9,11 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 emotion_dict = ["Angry","Disgust","Fear","Happy","Neutral","Sad","Surprise"]
 
 classifier =load_model("vgg_model.h5")
-#classifier2 =load_model("custom_model.h5") #| Done to reduce Slugsize
+classifier2 =load_model("custom_model.h5") 
 
 # load weights into new model
 classifier.load_weights("vgg_model.h5")
-#classifier2.load_weights("custom_model.h5")
+classifier2.load_weights("custom_model.h5")
 
 #load face
 try:
@@ -21,7 +21,7 @@ try:
 except Exception:
     st.write("Error loading cascade classifiers")
 
-class VideoTransformer_1(VideoTransformerBase): #VGG MODEL
+class VideoTransformer_1(VideoTransformerBase): 
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
 
@@ -64,7 +64,7 @@ class VideoTransformer_2(VideoTransformerBase):#CONV MODEL
                 roi = roi_gray.astype('float') / 255.0
                 roi = img_to_array(roi)
                 roi = np.expand_dims(roi, axis=0)
-                #prediction = classifier2.predict(roi)[0] #| Done to reduce Slugsize
+                prediction = classifier2.predict(roi)[0]
                 maxindex = int(np.argmax(prediction))
                 finalout = emotion_dict[maxindex]
                 output = 'CONV: ' + str(finalout)
@@ -88,7 +88,7 @@ def main():
 
         st.markdown(html_temp_home1, unsafe_allow_html=True)
 
-        model_select =  st.selectbox("Select Model",["None","VGG"]) #| Removed: "CONV" Done to reduce Slugsize
+        model_select =  st.selectbox("Select Model",["None","VGG", "CONV2"])
   
         if model_select == "VGG":    
             st.subheader("VGG Live Feed")
@@ -108,7 +108,7 @@ def main():
             st.write("1. Hit Start and enable camera permission.")
             st.write("2. Hit Stop to end demo")
             st.write("3. Try Different Models only after stopping present demo.")
-            #webrtc_streamer(key="example", video_processor_factory=VideoTransformer_2) #| Done to reduce Slugsize
+            webrtc_streamer(key="example", video_processor_factory=VideoTransformer_2)
             
             st.subheader("Model Information")
             st.write("Recall: 64.7 %")
