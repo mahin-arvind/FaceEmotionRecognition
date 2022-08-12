@@ -9,11 +9,11 @@ from streamlit_webrtc import webrtc_streamer, VideoTransformerBase
 emotion_dict = ["Angry","Disgust","Fear","Happy","Neutral","Sad","Surprise"]
 
 classifier =load_model("vgg_model.h5")
-classifier2 =load_model("custom_model.h5") 
+#classifier2 =load_model("custom_model.h5")  # TEST
 
 # load weights into new model
 classifier.load_weights("vgg_model.h5")
-classifier2.load_weights("custom_model.h5")
+#classifier2.load_weights("custom_model.h5")  # TEST
 
 #load face
 try:
@@ -64,7 +64,7 @@ class VideoTransformer_2(VideoTransformerBase):#CONV MODEL
                 roi = roi_gray.astype('float') / 255.0
                 roi = img_to_array(roi)
                 roi = np.expand_dims(roi, axis=0)
-                prediction = classifier2.predict(roi)[0]
+                #prediction = classifier2.predict(roi)[0] # TEST
                 maxindex = int(np.argmax(prediction))
                 finalout = emotion_dict[maxindex]
                 output = 'CONV: ' + str(finalout)
@@ -88,7 +88,7 @@ def main():
 
         st.markdown(html_temp_home1, unsafe_allow_html=True)
 
-        model_select =  st.selectbox("Select Model",["None","VGG", "CONV"])
+        model_select =  st.selectbox("Select Model",["None","VGG"])  # TEST:  "CONV"])  
   
         if model_select == "VGG":    
             st.subheader("VGG Live Feed")
