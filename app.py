@@ -96,7 +96,7 @@ def main():
             st.write("1. Hit Start and enable camera permission.")
             st.write("2. Hit Stop to end demo")
             st.write("3. Try Different Models only after stopping present demo.")
-            webrtc_streamer(key="example", video_transformer_factory=VideoTransformer_1)
+            webrtc_streamer(key="example", video_processor_factory=VideoTransformer_1)
             
             st.subheader("Model Information")
             st.write("Recall: 65.1 % ")
@@ -109,7 +109,7 @@ def main():
             st.write("1. Hit Start and enable camera permission.")
             st.write("2. Hit Stop to end demo")
             st.write("3. Try Different Models only after stopping present demo.")
-            webrtc_streamer(key="example", video_transformer_factory=VideoTransformer_2)
+            webrtc_streamer(key="example", video_processor_factory=VideoTransformer_2)
             
             st.subheader("Model Information")
             st.write("Recall: 64.7 %")
