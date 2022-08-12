@@ -88,7 +88,7 @@ def main():
 
         st.markdown(html_temp_home1, unsafe_allow_html=True)
 
-        model_select =  st.selectbox("Select Model",["None","VGG", "CONV2"])
+        model_select =  st.selectbox("Select Model",["None","VGG", "CONV"])
   
         if model_select == "VGG":    
             st.subheader("VGG Live Feed")
