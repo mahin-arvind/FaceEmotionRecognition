@@ -17,7 +17,7 @@ classifier.load_weights("vgg_model.h5")
 
 #load face
 try:
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml") #cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+    face_cascade = cv2.CascadeClassifier("haarcascade_frontalface_default.xml") #cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
 except Exception:
     st.write("Error loading cascade classifiers")
 
