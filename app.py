@@ -41,7 +41,7 @@ class VideoTransformer_1(VideoTransformerBase):
                 prediction = classifier.predict(roi)[0]
                 maxindex = int(np.argmax(prediction))
                 finalout = emotion_dict[maxindex]
-                output = 'VGG: ' + str(finalout)
+                output = str(finalout)
             label_position = (x, y)
             cv2.putText(img, output, label_position, cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
